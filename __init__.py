@@ -1,15 +1,14 @@
 # coding: utf-8
 
 import os
-from lib.api import run, filer, package
-from lib import conf
+from fabkit import run, filer, Package, conf
 
 
 git_dir = os.path.join(conf.REMOTE_TMP_DIR, 'git')
 
 
 def setup():
-    package.install('git')
+    Package('git').install()
     filer.mkdir(git_dir, mode='777')
 
 
