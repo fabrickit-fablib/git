@@ -1,10 +1,13 @@
 # coding: utf-8
 
 import os
-from fabkit import sudo, filer, Package, conf, expect
+from fabkit import sudo, filer, Package, expect
+from oslo_config import cfg
+
+CONF = cfg.CONF
 
 
-tmp_git_dir = os.path.join(conf.REMOTE_TMP_DIR, 'git')
+tmp_git_dir = os.path.join(CONF._remote_tmp_dir, 'git')
 
 
 def setup():
