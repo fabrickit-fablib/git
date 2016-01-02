@@ -1,7 +1,7 @@
 # coding: utf-8
 
 import os
-from fabkit import sudo, filer, Package, expect
+from fabkit import run, sudo, filer, Package, expect
 from oslo_config import cfg
 
 CONF = cfg.CONF
@@ -16,11 +16,8 @@ def setup():
     filer.mkdir(tmp_dest, mode='777')
 
 
-def sync(url, branch='master', dest=None, owner='root:root'):
-    if dest:
-        git_base_dir = dest.rsplit('/', 1)[0]
-        filer.mkdir(git_base_dir)
-    else:
+def sync(url, branch='master', dest=None, use_sudo=False):
+    if not dest:
         name = url.rsplit('/', 1)[1]
         dest = os.path.join(tmp_dest, name)
 
@@ -29,10 +26,11 @@ def sync(url, branch='master', dest=None, owner='root:root'):
                expects=[
                ['Are you sure you want to continue connecting (yes/no)?', 'yes\\n'],
                ],
-               use_sudo=True)
-        sudo('chown -R {0} {1}'.format(owner, dest))
+               use_sudo=use_sudo)
     else:
-        sudo('cd {0} && git pull'.format(dest))
-        sudo('chown -R {0} {1}'.format(owner, dest))
+        if use_sudo:
+            sudo('cd {0} && git pull'.format(dest))
+        else:
+            run('cd {0} && git pull'.format(dest))
 
     return dest

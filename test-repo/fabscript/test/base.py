@@ -11,3 +11,5 @@ def setup():
     git.sync('https://github.com/fabrickit-fablib/git.git')
     git.sync('https://github.com/fabrickit-fablib/git.git', dest='/tmp/git')
     git.sync('https://github.com/fabrickit-fablib/git.git', dest='/tmp/git')
+    git.sync('https://github.com/fabrickit-fablib/git.git', dest='/tmp/git-sudo', use_sudo=True)
+    git.sync('https://github.com/fabrickit-fablib/git.git', dest='/tmp/git-sudo', use_sudo=True)
