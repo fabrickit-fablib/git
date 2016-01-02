@@ -7,31 +7,31 @@ from oslo_config import cfg
 CONF = cfg.CONF
 
 
-tmp_git_dir = os.path.join(CONF._remote_tmp_dir, 'git')
+tmp_dest = os.path.join(CONF._remote_tmp_dir, 'git')
 
 
 def setup():
     Package('git').install()
     Package('expect').install()
-    filer.mkdir(tmp_git_dir, mode='777')
+    filer.mkdir(tmp_dest, mode='777')
 
 
-def sync(url, branch='master', git_dir=None, owner='root:root'):
-    if git_dir:
-        git_base_dir = git_dir.rsplit('/', 1)[0]
+def sync(url, branch='master', dest=None, owner='root:root'):
+    if dest:
+        git_base_dir = dest.rsplit('/', 1)[0]
         filer.mkdir(git_base_dir)
     else:
         name = url.rsplit('/', 1)[1]
-        git_dir = os.path.join(tmp_git_dir, name)
+        dest = os.path.join(tmp_dest, name)
 
-    if not filer.exists(git_dir):
-        expect('git clone -b {0} {1} {2}'.format(branch, url, git_dir),
+    if not filer.exists(dest):
+        expect('git clone -b {0} {1} {2}'.format(branch, url, dest),
                expects=[
                ['Are you sure you want to continue connecting (yes/no)?', 'yes\\n'],
                ],
                use_sudo=True)
-        sudo('chown -R {0} {1}'.format(owner, git_dir))
+        sudo('chown -R {0} {1}'.format(owner, dest))
     else:
-        sudo('cd {0} && git pull'.format(git_dir))
+        sudo('cd {0} && git pull'.format(dest))
 
-    return git_dir
+    return dest
