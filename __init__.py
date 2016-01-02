@@ -33,5 +33,6 @@ def sync(url, branch='master', dest=None, owner='root:root'):
         sudo('chown -R {0} {1}'.format(owner, dest))
     else:
         sudo('cd {0} && git pull'.format(dest))
+        sudo('chown -R {0} {1}'.format(owner, dest))
 
     return dest
