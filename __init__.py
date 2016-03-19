@@ -16,7 +16,7 @@ def setup():
     filer.mkdir(tmp_dest, mode='777')
 
 
-def sync(url, branch='master', dest=None, use_sudo=False):
+def sync(url, branch='master', dest=None, user=None):
     if not dest:
         name = url.rsplit('/', 1)[1]
         dest = os.path.join(tmp_dest, name)
@@ -26,10 +26,10 @@ def sync(url, branch='master', dest=None, use_sudo=False):
                expects=[
                ['Are you sure you want to continue connecting (yes/no)?', 'yes\\n'],
                ],
-               use_sudo=use_sudo)
+               user=user)
     else:
-        if use_sudo:
-            sudo('cd {0} && git pull'.format(dest))
+        if user is not None:
+            sudo('cd {0} && git pull'.format(dest), user=user)
         else:
             run('cd {0} && git pull'.format(dest))
 
