@@ -22,11 +22,14 @@ def sync(url, branch='master', dest=None, use_sudo=False):
         dest = os.path.join(tmp_dest, name)
 
     if not filer.exists(dest):
+        user = None
+        if use_sudo:
+            user = 'root'
         expect('git clone -b {0} {1} {2}'.format(branch, url, dest),
                expects=[
                ['Are you sure you want to continue connecting (yes/no)?', 'yes\\n'],
                ],
-               use_sudo=use_sudo)
+               user=user)
     else:
         if use_sudo:
             sudo('cd {0} && git pull'.format(dest))
